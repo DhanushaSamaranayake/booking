@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:booking/controllers/location_con.dart';
+import 'package:booking/controllers/seats_controller.dart';
 import 'package:booking/controllers/shared_pref.dart';
 import 'package:booking/pages/profile.dart';
 import 'package:booking/pages/select_location.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPref.getLocation()
         .then((value) => LocationController.instance.setCity(value));
     super.initState();
+    //SeatSelectionController.instance.getBookedSeats(setState);
   }
 
   static const CameraPosition _kLake = CameraPosition(
@@ -157,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 20.0, top: 20),
                   child: Text(
-                    "SEAT CATEGORIES",
+                    "SEAT TICKETS",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black.withOpacity(0.8)),
@@ -181,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Nearby theatres".toUpperCase(),
+                        "Nearby bus stations".toUpperCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black.withOpacity(0.8)),
@@ -244,9 +246,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                EventItems(
-                  events: events,
-                ),
+                //EventItems(
+                // events: events,
+                // ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 20.0, top: 10, right: 20),
@@ -262,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 5,
                       ),
                       Text(
-                        "Plays".toUpperCase(),
+                        "History".toUpperCase(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.black.withOpacity(0.8)),
@@ -278,9 +280,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                EventItems(
-                  events: plays,
-                ),
+                // EventItems(
+                //  events: plays,
+//),
               ],
             ),
           ),

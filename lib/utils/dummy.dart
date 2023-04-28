@@ -20,12 +20,7 @@ List<AdSliderModel> sliderData = [
 ];
 
 List<MenuModel> menus = [
-  MenuModel(name: "Movies", asset: "assets/icons/film.svg"),
-  MenuModel(name: "Events", asset: "assets/icons/spotlights.svg"),
-  MenuModel(name: "Plays", asset: "assets/icons/theater_masks.svg"),
-  MenuModel(name: "Sports", asset: "assets/icons/running.svg"),
-  MenuModel(name: "Activity", asset: "assets/icons/flag.svg"),
-  MenuModel(name: "Monum", asset: "assets/icons/pyramid.svg"),
+  MenuModel(name: "Tickets", asset: "assets/icons/tickets.svg"),
 ];
 
 List<MovieModel> movies = [
@@ -143,11 +138,11 @@ List<String> screens = [
 ];
 
 List<String> cities = [
-  "New Delhi",
-  "Banglore",
-  "Kolkata",
-  "Chennai",
-  "Lucknow",
+  "Moratuwa",
+  "Homagama",
+  "Mathara",
+  "Hambanthota",
+  "Beruwala",
 ];
 final seatLayout = SeatLayoutModel(
     rows: 8,

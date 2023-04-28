@@ -123,6 +123,18 @@ class AuthController extends GetxController {
     );
   }
 
+  getErrorCaution(String message) {
+    Get.snackbar(
+      "Caution!",
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: MyTheme.orangeColor,
+      colorText: Colors.white,
+      borderRadius: 10,
+      margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+    );
+  }
+
   getSuccessSnackBar(String message) {
     Get.snackbar(
       "Success",

@@ -9,11 +9,12 @@ import 'package:booking/model/movie.dart';
 import 'package:booking/utils/constants.dart';
 import 'package:booking/utils/dummy.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:flutter/foundation.dart';
 
 class SeatSelectionController extends GetxController {
   static SeatSelectionController instance = Get.find();
@@ -21,10 +22,9 @@ class SeatSelectionController extends GetxController {
   late DatabaseReference dbReff;
   final DateFormat format = DateFormat("EEEE, MMM dd, yyyy");
   final DateFormat time = DateFormat("hh:mm a");
-  //final MovieModel movieModel;
-
-  //SeatSelectionController({Key? key, required this.movieModel});
-
+  final databaseRef = FirebaseDatabase.instance.ref().child('Booked Seats');
+  //final RxList<String> seatNumbers = RxList<String>(['A1', 'D2', 'F4']);
+  RxList<String> seatNumbers = RxList<String>([]);
   var instancee = CalendarController.instance;
 
   RxInt timeSelectedIndex = 0.obs;
@@ -39,6 +39,7 @@ class SeatSelectionController extends GetxController {
   late Razorpay _razorpay;
 
   RxList selectedSeats = [].obs;
+  //RxString selectedSeats = ''.obs;
   RxList seatPrices = [].obs;
   RxDouble seatPrice = 0.0.obs;
   static const String _chars = '1234567890';
@@ -91,26 +92,46 @@ class SeatSelectionController extends GetxController {
       }),
     );
 
-    print(res.body);
+    //print(res.body);
     String orderId = jsonDecode(res.body)['id'];
-    print(orderId);
+    //print(orderId);
     createPayment(orderId);
+    //print(seatNumbers);
     //bookingSeats(orderId);
+    //print(selectedSeats);
+  }
+
+  void getBookedSeats(setState) {
+    print('getBookedSeats called');
+    DatabaseReference databaseReference =
+        FirebaseDatabase.instance.ref().child('Booked Seats');
+    databaseReference.onValue.listen((event) {
+      if (event.snapshot.value != null) {
+        Map<dynamic, dynamic> bookedSeats =
+            event.snapshot.value as Map<dynamic, dynamic>;
+
+        bookedSeats.forEach((key, value) {
+          String selectedSeats = value['selectedSeats'];
+          List<String> seats =
+              selectedSeats.split(',').map((seat) => seat.trim()).toList();
+
+          seatNumbers.addAll(seats);
+        });
+        setState(() {
+          //bookedSeats = seatNumbers.asMap();
+          bookedSeats = Map.fromIterable(
+            seatNumbers,
+            key: (seatNumber) => seatNumber,
+            value: (seatNumber) => 'booked',
+          );
+        });
+      }
+    });
   }
 
   void bookingSeats(String orderId) async {
-    //String timeValue = theatreModel.timings[timeSelectedIndex.value];
-    /*print("selectedSeats: $selectedSeats");
-    print("seatPrice: $seatPrice");
-    print(
-        "timeSelectedIndex: ${instance.format.format(instancee.selectedMovieDate.value)}");
-    print("orderId: $orderId");
-    print("destination: $destination");
-    print("busName: $busName");
-    print("destinationTime: $destinationTime");
-    print("busTime: $busTime");*/
     Map<String, String> booking = {
-      "selectedSeats": selectedSeats.toString(),
+      "selectedSeats": selectedSeats.join(','),
       "seatPrice": seatPrice.toString(),
       "timeSelectedIndex":
           instance.format.format(instancee.selectedMovieDate.value),
@@ -125,7 +146,7 @@ class SeatSelectionController extends GetxController {
     dbRef.push().set(booking);
 
     Map<String, String> seatsNumbers = {
-      "selectedSeats": selectedSeats.toString(),
+      "selectedSeats": selectedSeats.join(','),
     };
     dbReff.push().set(seatsNumbers);
   }

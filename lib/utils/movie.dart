@@ -4,6 +4,8 @@ import 'package:booking/widgets/item_block.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controllers/seats_controller.dart';
+
 class MoviesItems extends StatelessWidget {
   const MoviesItems({Key? key}) : super(key: key);
 

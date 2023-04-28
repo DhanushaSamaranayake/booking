@@ -29,6 +29,7 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
   @override
   void initState() {
     super.initState();
+    SeatSelectionController.instance.getBookedSeats(setState);
   }
 
   noOfSeatSelection() {
@@ -131,6 +132,8 @@ class _SeatSelectionScreenState extends State<SeatSelectionScreen> {
             SeatSelectionController.instance.selectedSeats = [].obs;
             SeatSelectionController.instance.seatPrice = 0.0.obs;
             SeatSelectionController.instance.seatPrices = [].obs;
+
+            //SeatSelectionController.instance.selectedSeats.value;
           },
           child: Obx(
             () => Row(

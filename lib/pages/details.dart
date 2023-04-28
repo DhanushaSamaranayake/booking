@@ -1,4 +1,5 @@
 import 'package:booking/controllers/location_con.dart';
+import 'package:booking/controllers/seats_controller.dart';
 import 'package:booking/pages/list_screens.dart';
 import 'package:booking/utils/mythemes.dart';
 import 'package:flutter/material.dart';
@@ -222,9 +223,15 @@ class DetailsScreen extends StatelessWidget {
               onPressed: () {
                 Get.back();
               },
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.blue,
+              ),
             ),
-            title: Text(model.title),
+            title: Text(
+              model.title,
+              style: const TextStyle(color: Colors.blue),
+            ),
             pinned: true,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
@@ -235,7 +242,7 @@ class DetailsScreen extends StatelessWidget {
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       image: AssetImage(
-                        "assets/movie_banner.png",
+                        "assets/banner.png",
                       ),
                     ),
                   ),

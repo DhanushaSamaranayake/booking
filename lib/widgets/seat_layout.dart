@@ -1,6 +1,8 @@
+import 'package:booking/controllers/auth_con.dart';
 import 'package:booking/controllers/seats_controller.dart';
 import 'package:booking/model/seat_layout.dart';
 import 'package:booking/utils/mythemes.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -13,51 +15,68 @@ class SeatLayout extends StatelessWidget {
   int seatCounter = 0;
   double amount = 0.0;
 
-  Widget mainSeatLayout(
-      {required Function(double) seatPrice,
-      required double price,
-      required String rowNo}) {
-    String seatNo = "$seatCounter";
+  //final List<String> bookedSeats = ['A1'];
+
+  Widget mainSeatLayout({
+    required Function(double) seatPrice,
+    required double price,
+    required String rowNo,
+    required String seatNo,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
           RxList seats = SeatSelectionController.instance.selectedSeats;
           RxList seatPriceList = SeatSelectionController.instance.seatPrices;
-          //print(price);
-          if (seats.contains("$rowNo$seatNo")) {
-            seatPriceList.remove(price);
-            seats.remove("$rowNo$seatNo");
+          RxList bookedSeats = SeatSelectionController.instance.seatNumbers;
+          print(SeatSelectionController.instance.seatNumbers);
+          if (bookedSeats.contains("$rowNo$seatNo")) {
+            AuthController.instance.getErrorCaution(
+                "These Seats are already Booked \nPlease Try Another One");
           } else {
-            if (seats.length >=
-                SeatSelectionController.instance.noOfSeats.value) {
-              seats.removeAt(0);
-              seatPriceList.removeAt(0);
-              seats.add("$rowNo$seatNo");
-              seatPriceList.add(price);
+            if (seats.contains("$rowNo$seatNo")) {
+              seatPriceList.remove(price);
+              seats.remove("$rowNo$seatNo");
             } else {
-              seatPriceList.add(price);
-              seats.add("$rowNo$seatNo");
+              if (seats.length >=
+                  SeatSelectionController.instance.noOfSeats.value) {
+                seats.removeAt(0);
+                seatPriceList.removeAt(0);
+                seats.add("$rowNo$seatNo");
+                seatPriceList.add(price);
+              } else {
+                seatPriceList.add(price);
+                seats.add("$rowNo$seatNo");
+              }
             }
-          }
 
-          amount = seatPriceList.fold(0, (prev, e) => prev + e);
-          seatPrice(amount < 0 ? 0.0 : amount);
+            amount = seatPriceList.fold(0, (prev, e) => prev + e);
+            seatPrice(amount < 0 ? 0.0 : amount);
+          }
         },
         child: Obx(
           () {
-            Color backColor = SeatSelectionController.instance.selectedSeats
-                    .contains("$rowNo$seatNo")
-                ? MyTheme.greenColor
-                : const Color(0xffffffff);
-            Color textColor = SeatSelectionController.instance.selectedSeats
-                    .contains("$rowNo$seatNo")
+            bool isBooked = SeatSelectionController.instance.seatNumbers
+                .contains("$rowNo$seatNo");
+            Color backColor = isBooked
+                ? Colors.grey
+                : SeatSelectionController.instance.selectedSeats
+                        .contains("$rowNo$seatNo")
+                    ? MyTheme.greenColor
+                    : const Color(0xffffffff);
+            Color textColor = isBooked
                 ? Colors.white
-                : Colors.black87;
-            Color borderColor = SeatSelectionController.instance.selectedSeats
-                    .contains("$rowNo$seatNo")
-                ? MyTheme.greenColor
-                : const Color(0xff707070);
+                : SeatSelectionController.instance.selectedSeats
+                        .contains("$rowNo$seatNo")
+                    ? Colors.white
+                    : Colors.black87;
+            Color borderColor = isBooked
+                ? Colors.grey
+                : SeatSelectionController.instance.selectedSeats
+                        .contains("$rowNo$seatNo")
+                    ? MyTheme.greenColor
+                    : const Color(0xff707070);
             return AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 20,
@@ -86,6 +105,7 @@ class SeatLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int seatLength = model.seatTypes.length;
+
     return Expanded(
       child: Column(
         children: [
@@ -160,10 +180,14 @@ class SeatLayout extends StatelessWidget {
                                             ['price'];
 
                                     return mainSeatLayout(
-                                        seatPrice: SeatSelectionController
-                                            .instance.seatPrice,
-                                        price: price,
-                                        rowNo: rowNo);
+                                      seatPrice: SeatSelectionController
+                                          .instance.seatPrice,
+                                      price: price,
+                                      rowNo: rowNo,
+                                      seatNo: seatNo,
+                                      //bookedSeatss: bookedSeatss
+                                      // add this line with the appropriate value for seatNo
+                                    );
                                   },
                                 ),
                               );
