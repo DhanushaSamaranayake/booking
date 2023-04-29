@@ -129,6 +129,32 @@ class SeatSelectionController extends GetxController {
     });
   }
 
+  Future sendEmail() async {
+    final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
+    const serviceId = "service_1vyixyg";
+    const templateId = "template_gr0mt8u";
+    const userId = "7SOh7RVs9BK5oQY5t";
+    final response = await http.post(url,
+        headers: {
+          'origin': 'http://localhost',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'service_id': serviceId,
+          'template_id': templateId,
+          'user_id': userId,
+          'template_params': {
+            'name': 'Isiwara',
+            'subject': 'Test email',
+            'message': 'This is a test message',
+            //'user_email': AuthController.instance.user!.email,
+            'user_email': 'lyrenuka00@gmail.com',
+          }
+        }));
+    AuthController.instance.getSuccessSnackBar("Email Sent successfully...!");
+    return response.statusCode;
+  }
+
   void bookingSeats(String orderId) async {
     Map<String, String> booking = {
       "selectedSeats": selectedSeats.join(','),
@@ -178,6 +204,7 @@ class SeatSelectionController extends GetxController {
     AuthController.instance.getSuccessSnackBar(
         "Payment Success for order Id : ${response.orderId}");
     bookingSeats(response.orderId!);
+    sendEmail();
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
