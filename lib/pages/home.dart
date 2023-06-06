@@ -4,6 +4,7 @@ import 'package:booking/controllers/location_con.dart';
 import 'package:booking/controllers/seats_controller.dart';
 import 'package:booking/controllers/shared_pref.dart';
 import 'package:booking/pages/profile.dart';
+import 'package:booking/pages/scan.dart';
 import 'package:booking/pages/select_location.dart';
 import 'package:booking/utils/constants.dart';
 import 'package:booking/utils/customslider.dart';
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AuthController.instance.user!.displayName ?? "Name",
+                    AuthController.instance.user!.displayName ?? "Isiwara",
                     style: TextStyle(color: Colors.white),
                   ),
                   GestureDetector(
@@ -118,7 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => Scan());
+                },
                 icon: SvgPicture.asset("assets/icons/search.svg"),
               ),
               IconButton(

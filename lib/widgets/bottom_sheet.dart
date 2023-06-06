@@ -98,7 +98,7 @@ class FacilitesBottomSheet extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: model.facilites.length,
+                  itemCount: 2,
                   itemBuilder: (_, index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 20),

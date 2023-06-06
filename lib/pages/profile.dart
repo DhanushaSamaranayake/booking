@@ -42,9 +42,9 @@ class _ProfileScreenState extends State<ProfileScreen>
         const SystemUiOverlayStyle(statusBarColor: MyTheme.appBarColor));
     String? picUrl = AuthController.instance.user!.photoURL;
     picUrl = picUrl ?? Constants.dummyAvatar;
-    String? name = AuthController.instance.user!.displayName ?? "NO Name";
+    String? name = AuthController.instance.user!.displayName ?? "Isiwara";
     String? email = AuthController.instance.user!.email;
-    String? mobile = AuthController.instance.user!.phoneNumber ?? "0000000000";
+    String? mobile = AuthController.instance.user!.phoneNumber ?? "0778862573";
     mobileController.text = mobile;
     nameController.text = name;
     emailController.text = email.toString();

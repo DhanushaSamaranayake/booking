@@ -178,9 +178,7 @@ List<OfferModel> offers = [
 ];
 List<String> facilityAsset = [
   "assets/icons/cancel.svg",
-  "assets/icons/parking.svg",
   "assets/icons/cutlery.svg",
-  "assets/icons/rocking_horse.svg",
 ];
 
 List<CrewCastModel> crewCast = [

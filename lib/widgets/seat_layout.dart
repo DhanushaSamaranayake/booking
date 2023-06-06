@@ -109,8 +109,11 @@ class SeatLayout extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          SvgPicture.asset("assets/icons/screen_here.svg"),
-          const Text("Screen Here"),
+          Image.asset(
+            "assets/screen.png",
+            height: 50,
+          ),
+          const Text("Driver Here"),
           const SizedBox(
             height: 10,
           ),

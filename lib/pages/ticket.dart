@@ -1,10 +1,16 @@
+import 'dart:io';
+import 'package:booking/pages/scan.dart';
+import 'package:path/path.dart' as path_utils;
 import 'package:barcode/barcode.dart';
 import 'package:booking/controllers/auth_con.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class FetchData extends StatefulWidget {
   const FetchData({Key? key}) : super(key: key);
@@ -21,7 +27,44 @@ class _FetchDataState extends State<FetchData> {
   DatabaseReference reference =
       FirebaseDatabase.instance.ref().child('Booked Seats');
 
-  Widget listItem({required Map booking}) {
+  /*Future<void> _checkPermission() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
+  }
+
+  Future<void> _downloadTicket(Map booking) async {
+    print("download function called");
+    final url = booking['ticketUrl'];
+    if (url == null) {
+      // handle the case where the URL is null
+      return;
+    }
+
+    Directory? directory = await getExternalStorageDirectory();
+    if (directory == null) {
+      print('Unable to get external storage directory');
+      return;
+    }
+
+    String savePath = path_utils.join(directory.path, 'Download');
+
+    await Directory(savePath).create(recursive: true);
+
+    await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: savePath,
+      fileName: 'ticket_${booking['key']}.pdf',
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+  }*/
+
+  Widget listItem({
+    required Map booking,
+    /*required VoidCallback onDownload*/
+  }) {
     Color primaryColor = const Color.fromRGBO(42, 106, 238, 1);
     return Container(
       margin: const EdgeInsets.all(0),
@@ -198,7 +241,7 @@ class _FetchDataState extends State<FetchData> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: const [
                                     Text(
-                                      "Richard Susanto",
+                                      "Isiwara",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
@@ -214,7 +257,7 @@ class _FetchDataState extends State<FetchData> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: const [
                                     Text(
-                                      "323253443",
+                                      "199932812530",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
@@ -361,10 +404,10 @@ class _FetchDataState extends State<FetchData> {
                           ),
                           Expanded(
                             child: FutureBuilder<String?>(
-                              future: generateBarcode(),
+                              future: generateBarcode(booking),
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return SvgPicture.string(snapshot.data ?? "");
+                                  return SvgPicture.string(snapshot.data ?? '');
                                 }
                                 return const Center(
                                   child: CircularProgressIndicator(),
@@ -382,6 +425,12 @@ class _FetchDataState extends State<FetchData> {
                               fontSize: 12,
                               color: Colors.grey,
                             ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Scan();
+                            },
+                            child: const Icon(Icons.download),
                           )
                         ],
                       ),
@@ -426,13 +475,10 @@ class _FetchDataState extends State<FetchData> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(42, 106, 238, 1),
-          automaticallyImplyLeading: false,
+          //automaticallyImplyLeading: false,
+
           title: Row(
             children: const [
-              Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-              ),
               Expanded(
                 child: Center(
                   child: Text(
@@ -457,14 +503,22 @@ class _FetchDataState extends State<FetchData> {
               Map booking = snapshot.value as Map;
               booking['key'] = snapshot.key;
 
-              return listItem(booking: booking);
+              return listItem(
+                booking: booking,
+                /*onDownload: () => _checkPermission().then((_) {
+                  _downloadTicket(booking);
+                }),*/
+              );
             },
           ),
         ));
   }
 
-  Future<String?> generateBarcode() async {
+  Future<String?> generateBarcode(Map booking) async {
     final dm = Barcode.code128();
-    return dm.toSvg("123456789", width: 400, height: 100);
+    final jsonData =
+        '''${booking['destination']}, ${booking['selectedSeats']}, ${booking['seatPrice']}'''; // Convert the booking details to a string
+    final svg = dm.toSvg(jsonData, width: 500, height: 100);
+    return svg;
   }
 }

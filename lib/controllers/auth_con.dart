@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:booking/pages/home.dart';
 import 'package:booking/utils/mythemes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,8 @@ class AuthController extends GetxController {
   bool isLoging = false;
   User? get user => _user.value;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final DatabaseReference _userRef =
+      FirebaseDatabase.instance.ref().child('users');
 
   @override
   void onReady() {

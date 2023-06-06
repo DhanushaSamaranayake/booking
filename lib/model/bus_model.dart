@@ -18,11 +18,8 @@ class TheatreModel {
     this.facilites = const [
       "Cancel",
       "Parking",
-      "Hotel",
-      "Park",
     ],
-    this.fullAddress =
-        "City Mall, 2 nd floor Park Road, Civil Lines, Golghar, Gorakhpur, Uttar Pradesh 273001",
+    this.fullAddress = "Private Stand, Bus stop",
     this.timings = const [
       "10:00 AM",
       "1:30 PM",
@@ -31,8 +28,8 @@ class TheatreModel {
       "12:30 AM",
     ],
     this.avalableScreens = const [
-      "3D",
-      "2D",
+      "AC",
+      "Non-A/C",
     ],
   });
 

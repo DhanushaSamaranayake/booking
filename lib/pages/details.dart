@@ -48,21 +48,6 @@ class DetailsScreen extends StatelessWidget {
           const SizedBox(
             width: 10,
           ),
-          Row(
-            children: [
-              const Icon(
-                Icons.favorite,
-                color: MyTheme.splash,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                "${model.like}%",
-                style: const TextStyle(fontSize: 10),
-              )
-            ],
-          )
         ],
       );
 
@@ -150,12 +135,6 @@ class DetailsScreen extends StatelessWidget {
                   "${model.busNumber}",
                   style: const TextStyle(
                     color: Colors.black45,
-                  ),
-                ),
-                const Text(
-                  "1.8K votes",
-                  style: TextStyle(
-                    color: MyTheme.splash,
                   ),
                 ),
               ],

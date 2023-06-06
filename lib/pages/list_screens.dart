@@ -31,9 +31,9 @@ class _ListCinemaScreenState extends State<ListCinemaScreen> {
 
   String selectedDate = DateFormat("dd MMM").format(DateTime.now());
 
-  String selectedLanguage = "English";
+  String selectedLanguage = "Type";
 
-  String selectedScreen = "3D";
+  String selectedScreen = "AC";
   late CalendarController commonController;
 
   @override

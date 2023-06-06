@@ -118,12 +118,12 @@ class SeatSelectionController extends GetxController {
           seatNumbers.addAll(seats);
         });
         setState(() {
-          //bookedSeats = seatNumbers.asMap();
-          bookedSeats = Map.fromIterable(
+          bookedSeats = seatNumbers.asMap();
+          /*bookedSeats = Map.fromIterable(
             seatNumbers,
             key: (seatNumber) => seatNumber,
             value: (seatNumber) => 'booked',
-          );
+          );*/
         });
       }
     });
@@ -145,10 +145,16 @@ class SeatSelectionController extends GetxController {
           'user_id': userId,
           'template_params': {
             'name': 'Isiwara',
-            'subject': 'Test email',
-            'message': 'This is a test message',
+            'subject': 'Your Booking Details',
+            'message': 'Selected seats: ${selectedSeats.join(',')}\n'
+                'Price: $seatPrice\n'
+                'Bus Name: $busName\n'
+                'Time: $busTime \n'
+                'Destination: $destination \n'
+                'Destination Time: $destinationTime \n',
+
             //'user_email': AuthController.instance.user!.email,
-            'user_email': 'lyrenuka00@gmail.com',
+            //'user_email': 'lyrenuka00@gmail.com',
           }
         }));
     AuthController.instance.getSuccessSnackBar("Email Sent successfully...!");
